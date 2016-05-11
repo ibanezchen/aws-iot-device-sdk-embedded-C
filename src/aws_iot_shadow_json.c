@@ -203,7 +203,7 @@ IoT_Error_t aws_iot_shadow_add_reported(char *pJsonDocument, size_t maxSizeOfJso
 int32_t FillWithClientTokenSize(char *pBufferToBeUpdatedWithClientToken, size_t maxSizeOfJsonDocument) {
 	int32_t snPrintfReturn;
 	snPrintfReturn = snprintf(pBufferToBeUpdatedWithClientToken, maxSizeOfJsonDocument, "%s-%d", mqttClientID,
-							  clientTokenNum++);
+							  (int)clientTokenNum++);
 
 	return snPrintfReturn;
 }
@@ -268,7 +268,7 @@ IoT_Error_t aws_iot_finalize_json_document(char *pJsonDocument, size_t maxSizeOf
 }
 
 void FillWithClientToken(char *pBufferToBeUpdatedWithClientToken) {
-	sprintf(pBufferToBeUpdatedWithClientToken, "%s-%d", mqttClientID, clientTokenNum++);
+	sprintf(pBufferToBeUpdatedWithClientToken, "%s-%d", mqttClientID, (int)clientTokenNum++);
 }
 
 static IoT_Error_t convertDataToString(char *pStringBuffer, size_t maxSizoStringBuffer, JsonPrimitiveType type,
@@ -295,7 +295,7 @@ static IoT_Error_t convertDataToString(char *pStringBuffer, size_t maxSizoString
 	} else if(type == SHADOW_JSON_DOUBLE) {
 		snPrintfReturn = snprintf(pStringBuffer, maxSizoStringBuffer, "%f,", *(double *) (pData));
 	} else if(type == SHADOW_JSON_FLOAT) {
-		snPrintfReturn = snprintf(pStringBuffer, maxSizoStringBuffer, "%f,", *(float *) (pData));
+		snPrintfReturn = snprintf(pStringBuffer, maxSizoStringBuffer, "%f,", (double)(*(float *) (pData)));
 	} else if(type == SHADOW_JSON_BOOL) {
 		snPrintfReturn = snprintf(pStringBuffer, maxSizoStringBuffer, "%s,", *(bool *) (pData) ? "true" : "false");
 	} else if(type == SHADOW_JSON_STRING) {
@@ -364,10 +364,10 @@ bool isJsonKeyMatchingAndUpdateValue(const char *pJsonDocument, void *pJsonHandl
 									 jsonStruct_t *pDataStruct, uint32_t *pDataLength, int32_t *pDataPosition) {
 	int32_t i;
 	uint32_t dataLength;
-	jsmntok_t *pJsonTokenStruct;
+	//jsmntok_t *pJsonTokenStruct;
 	jsmntok_t dataToken;
 
-	pJsonTokenStruct = (jsmntok_t *) pJsonHandler;
+	//pJsonTokenStruct = (jsmntok_t *) pJsonHandler;
 	for(i = 1; i < tokenCount; i++) {
 		if(jsoneq(pJsonDocument, &(jsonTokenStruct[i]), pDataStruct->pKey) == 0) {
 			dataToken = jsonTokenStruct[i + 1];
