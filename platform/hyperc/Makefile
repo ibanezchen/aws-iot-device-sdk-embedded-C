@@ -41,4 +41,5 @@ default:all
 include $(PREFIX)/share/Makefile.rule
 
 _header:
+	mkdir -p $(PREFIX)/include/$(NAME)
 	cp platform/$(PLT)/*.h $(PREFIX)/include/$(NAME)
