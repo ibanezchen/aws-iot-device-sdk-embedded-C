@@ -44,7 +44,7 @@
 void MQTTcallbackHandler(AWS_IoT_Client *pClient, char *topicName, uint16_t topicNameLen,
 						 IoT_Publish_Message_Params *params, void *pData) {
 	INFO("Subscribe callback");
-	INFO("%.*s\t%.*s", topicNameLen, topicName, (int)params->payloadLen, params->payload);
+	INFO("%.*s\t%.*s", topicNameLen, topicName, (int)params->payloadLen, (char*)(params->payload));
 }
 
 void disconnectCallbackHandler(AWS_IoT_Client *pClient, void *data) {
@@ -158,9 +158,9 @@ int main(int argc, char** argv) {
 	mqttInitParams.pRootCALocation = rootCA;
 	mqttInitParams.pDeviceCertLocation = clientCRT;
 	mqttInitParams.pDevicePrivateKeyLocation = clientKey;
-	mqttInitParams.mqttCommandTimeout_ms = 2000;
-	mqttInitParams.tlsHandshakeTimeout_ms = 5000;
-	mqttInitParams.isSSLHostnameVerify = true;
+	mqttInitParams.mqttCommandTimeout_ms = 10000;
+	mqttInitParams.tlsHandshakeTimeout_ms = 10000;
+	mqttInitParams.isSSLHostnameVerify = false;
 	mqttInitParams.disconnectHandler = disconnectCallbackHandler;
 	mqttInitParams.disconnectHandlerData = (void *)&client;
 
