@@ -5,19 +5,20 @@ CROSS  :=$(TARGET)-
 SOC    ?=soc-sim
 CPU    :=arm
 PLT:=hyperc
-INCLUDE:=-Iinclude -I$(PREFIX)/include/$(SOC) -I$(PREFIX)/include\
+INCLUDE:=-Iinclude -I$(PREFIX)/include \
 	-I$(PREFIX)/include/lwip \
 	-I$(PREFIX)/include/lwip/ipv4 \
 	-Isamples/linux/shadow_sample \
 	-Iexternal_libs/jsmn \
-	-Iplatform/$(PLT)
+	-Iplatform/$(PLT) \
+	$(SOC_INC)
 COPTS  ?=-march=armv7-a -mthumb -msoft-float
 AARCH  :=$(shell echo $(COPTS) | sed -e 's/.*armv\([0-9]\).*/\1/g')
 MOPTS  :=$(COPTS) \
           -DCFG_AARCH=$(AARCH) \
           -fno-builtin -fno-common \
           -ffunction-sections -fdata-sections
-CONFIG :=-D_ENABLE_THREAD_SUPPORT_
+CONFIG :=#-D_ENABLE_THREAD_SUPPORT_
 ASFLAGS:=$(MOPTS) $(CONFIG) -O2 -g -Wall -Werror -D __ASSEMBLY__
 CFLAGS :=$(MOPTS) $(CONFIG) -O2 -g -Wall -Werror -fno-builtin
 LSCRIPT:=ram.ld
