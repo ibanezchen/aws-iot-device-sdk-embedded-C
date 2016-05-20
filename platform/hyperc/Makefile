@@ -18,7 +18,8 @@ MOPTS  :=$(COPTS) \
           -DCFG_AARCH=$(AARCH) \
           -fno-builtin -fno-common \
           -ffunction-sections -fdata-sections
-CONFIG :=#-D_ENABLE_THREAD_SUPPORT_
+CONFIG := -DAWS_HYPERC_DBG=1 \
+	#-D_ENABLE_THREAD_SUPPORT_
 ASFLAGS:=$(MOPTS) $(CONFIG) -O2 -g -Wall -Werror -D __ASSEMBLY__
 CFLAGS :=$(MOPTS) $(CONFIG) -O2 -g -Wall -Werror -fno-builtin
 LSCRIPT:=ram.ld

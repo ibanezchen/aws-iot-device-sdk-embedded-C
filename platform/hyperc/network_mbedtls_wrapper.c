@@ -12,7 +12,7 @@
  * express or implied. See the License for the specific language governing
  * permissions and limitations under the License.
  */
-#define _DBG 1
+#define _DBG AWS_HYPERC_DBG
 #include <hcos/dbg.h>
 #include <stdbool.h>
 #include <string.h>
@@ -82,6 +82,19 @@ IoT_Error_t iot_tls_is_connected(Network *pNetwork) {
 	return NETWORK_PHYSICAL_LAYER_CONNECTED;
 }
 
+void _printf(const char *str, ...);
+
+void my_debug( void *ctx, int level,
+                      const char *file, int line,
+                      const char *str )
+{
+	const char *p, *basename;
+	for( p = basename = file; *p != '\0'; p++ )
+		if( *p == '/' || *p == '\\' )
+			basename = p + 1;
+	_printf("%s:%04d: |%d| %s", basename, line, level, str );
+}
+
 IoT_Error_t iot_tls_connect(Network *pNetwork, TLSConnectParams *params) {
 	if(NULL == pNetwork) {
 		return NULL_VALUE_ERROR;
@@ -103,6 +116,11 @@ IoT_Error_t iot_tls_connect(Network *pNetwork, TLSConnectParams *params) {
 	mbedtls_net_init(&(tlsDataParams->server_fd));
 	mbedtls_ssl_init(&(tlsDataParams->ssl));
 	mbedtls_ssl_config_init(&(tlsDataParams->conf));
+#if AWS_HYPERC_DBG > 1
+	dbg("enable ssh debug\n");
+	mbedtls_ssl_conf_dbg( &(tlsDataParams->conf), my_debug, 0 );
+	mbedtls_debug_set_threshold(10);
+#endif
 	mbedtls_ctr_drbg_init(&(tlsDataParams->ctr_drbg));
 	mbedtls_x509_crt_init(&(tlsDataParams->cacert));
 	mbedtls_x509_crt_init(&(tlsDataParams->clicert));
