@@ -82,7 +82,7 @@ IoT_Error_t iot_tls_is_connected(Network *pNetwork) {
 	return NETWORK_PHYSICAL_LAYER_CONNECTED;
 }
 
-void _printf(const char *str, ...);
+int _printf(const char *str, ...);
 
 void my_debug( void *ctx, int level,
                       const char *file, int line,
