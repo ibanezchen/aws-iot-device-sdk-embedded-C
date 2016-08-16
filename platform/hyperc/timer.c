@@ -7,15 +7,15 @@ bool has_timer_expired(Timer* timer) {
 }
 
 void countdown_ms(Timer* timer, uint32_t timeout) {
-	timer->expire = tmr_ticks + (timeout*PLT_HZ)/1000;
+	timer->expire = tmr_ticks + (timeout*tmr_hz)/1000;
 }
 
 void countdown_sec(Timer* timer, uint32_t timeout) {
-	timer->expire = tmr_ticks + (timeout*PLT_HZ);
+	timer->expire = tmr_ticks + (timeout*tmr_hz);
 }
 
 uint32_t left_ms(Timer* timer) {
-	return ((timer->expire - tmr_ticks) * 1000)/PLT_HZ;
+	return ((timer->expire - tmr_ticks) * 1000)/tmr_hz;
 }
 
 void init_timer(Timer* timer) 
